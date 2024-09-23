@@ -15,6 +15,9 @@ func main() {
 	// 初始化数据库连接
 	core.InitDatabase()
 
+	// 初始化redis连接
+	core.InitRedis()
+
 	// 初始化路由
 	r := gin.Default()
 

@@ -21,4 +21,5 @@ func InitDatabase() {
 		return
 	}
 	global.DB = db
+	logrus.Info("mysql 连接成功")
 }

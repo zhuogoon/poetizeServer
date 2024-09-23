@@ -48,6 +48,15 @@ func JwtParse() gin.HandlerFunc {
 			return
 		}
 
+		// 检查黑名单
+		val, err := global.RDB.Get(global.Ctx, auth).Result()
+		if err == nil && val == "revoked" {
+			resp.Code = http.StatusOK
+			resp.Msg = "请重新登录"
+			c.AbortWithStatusJSON(http.StatusOK, resp)
+			return
+		}
+
 		t := strings.Split(auth, " ")
 		if len(t) != 2 {
 			resp.Code = http.StatusOK

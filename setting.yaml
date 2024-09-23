@@ -5,3 +5,8 @@ mysql:
   user: root
   password: "123456"
   config: charset=utf8&parseTime=true
+
+redis:
+  host: 127.0.0.1:6379
+  password: ""
+  DB: 0

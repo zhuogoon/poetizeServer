@@ -60,3 +60,12 @@ func GetIdByUsername(username string) (uint, error) {
 	}
 	return user.ID, nil
 }
+
+func GetInfo() (models.User, error) {
+	var user models.User
+	err := global.DB.Model(&models.User{}).Where("id = ?", global.UserId).First(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
