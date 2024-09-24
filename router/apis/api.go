@@ -16,3 +16,10 @@ func Router(r *gin.RouterGroup) {
 
 	r.POST("changepassword", ChangePassword)
 }
+
+func Art(r *gin.RouterGroup) {
+
+	r.POST("create", CreateArt)
+
+	r.POST("artinfo", ArtInfo)
+}

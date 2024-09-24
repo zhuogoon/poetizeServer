@@ -8,6 +8,8 @@ import (
 func Router(r *gin.Engine) {
 
 	user := r.Group("/api/user")
+	art := r.Group("api/art")
 
 	apis.Router(user)
+	apis.Art(art)
 }
