@@ -4,10 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"poetize_server/core"
+	_ "poetize_server/docs" // 引入生成的文档
 	"poetize_server/middleware"
 	"poetize_server/router"
 )
 
+// @title 最美的博客
+// @version 1.0
+// @description 做一个最没的博客后端
+// @host 8080
+// @BasePath /api
 func main() {
 	// 初始化配置文件
 	core.InitConfig()
@@ -20,6 +26,8 @@ func main() {
 
 	// 初始化路由
 	r := gin.Default()
+	// 初始化 swag
+	core.InitSwag(r)
 
 	// 解决跨域问题
 	r.Use(middleware.Cors())

@@ -69,3 +69,7 @@ func GetInfo() (models.User, error) {
 	}
 	return user, nil
 }
+
+func Update(user models.User) error {
+	return global.DB.Model(&models.User{}).Where("id = ?", global.UserId).Updates(user).Error
+}

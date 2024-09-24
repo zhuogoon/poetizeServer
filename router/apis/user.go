@@ -11,6 +11,16 @@ import (
 	"poetize_server/models/response"
 )
 
+// Register 注册接口
+// @Summary 注册
+// @Description 注册用户
+// @Tags 用户相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param user body request.UserRequest true "username"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/user/register [post]
 func Register(c *gin.Context) {
 	req := &request.UserRequest{}
 	resp := &response.BaseResponse{}
@@ -34,6 +44,16 @@ func Register(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusOK, resp)
 }
 
+// Login 登录接口
+// @Summary 登录
+// @Description 用户的登录，通过账号密码
+// @Tags 用户相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string false "Bearer 用户令牌"
+// @Param user body request.UserRequest true "username"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/user/login [post]
 func Login(c *gin.Context) {
 	req := &request.UserRequest{}
 	resp := &response.BaseResponse{}
@@ -81,7 +101,15 @@ func Login(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusOK, resp)
 }
 
-// Logout 退出登录
+// Logout  登出接口
+// @Summary 登出
+// @Description 登出自己的账号
+// @Tags 用户相关
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/user/logout [post]
+// @Security ApiKeyAuth
 func Logout(c *gin.Context) {
 	resp := &response.BaseResponse{}
 	token := c.GetHeader("Authorization")
@@ -93,6 +121,15 @@ func Logout(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusOK, resp)
 }
 
+// Info 获取信息接口
+// @Summary 获取信息
+// @Description 获取到所需要的用户基本信息
+// @Tags 用户相关
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Success 200 {object} response.UserInfo
+// @Router /api/user/info [get]
+// @Security ApiKeyAuth
 func Info(c *gin.Context) {
 	resp := &response.UserInfo{}
 	var err error
@@ -118,10 +155,45 @@ func Info(c *gin.Context) {
 	resp.User.Introduction = user.Introduction
 	resp.User.CreatedAt = user.CreatedAt
 	resp.User.UpdatedAt = user.UpdatedAt
-	resp.User.DeletedAt = user.DeletedAt
 
 	resp.Code = http.StatusOK
 	resp.Msg = "获取成功"
+	c.AbortWithStatusJSON(http.StatusOK, resp)
+	return
+}
+
+// Update 更新用户信息接口
+// @Summary 更新信息
+// @Description 更新用户的基本信息
+// @Tags 用户相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body models.User true "username"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/user/update [post]
+// @Security ApiKeyAuth
+func Update(c *gin.Context) {
+	req := models.User{}
+	resp := response.BaseResponse{}
+
+	err := c.ShouldBindBodyWithJSON(&req)
+	if err != nil {
+		resp.Code = http.StatusOK
+		resp.Msg = "参数错误"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+	err = biz.Update(req)
+	if err != nil {
+		resp.Code = http.StatusOK
+		resp.Msg = "更新失败"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+
+	resp.Code = http.StatusOK
+	resp.Msg = "更新成功"
 	c.AbortWithStatusJSON(http.StatusOK, resp)
 	return
 }

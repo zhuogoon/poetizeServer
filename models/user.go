@@ -2,6 +2,8 @@ package models
 
 import "gorm.io/gorm"
 
+// User 定义用户模型
+// @Description User model with GORM fields
 type User struct {
 	gorm.Model
 	Username     string `json:"username" gorm:"username"`

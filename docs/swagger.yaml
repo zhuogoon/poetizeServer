@@ -1,0 +1,186 @@
+basePath: /api
+definitions:
+  models.User:
+    type: object
+  request.UserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  response.BaseResponse:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+  response.UserInfo:
+    description: UserInfo model with GORM fields
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+      user:
+        properties:
+          admire:
+            type: string
+          avatar:
+            type: string
+          created_at:
+            type: string
+          email:
+            type: string
+          gender:
+            type: integer
+          id:
+            type: integer
+          introduction:
+            type: string
+          open_id:
+            type: string
+          phone_number:
+            type: string
+          subscribe:
+            type: string
+          updated_at:
+            type: string
+          user_type:
+            type: integer
+          username:
+            type: string
+        type: object
+    type: object
+host: "8080"
+info:
+  contact: {}
+  description: 做一个最没的博客后端
+  title: 最美的博客
+  version: "1.0"
+paths:
+  /api/user/info:
+    get:
+      description: 获取到所需要的用户基本信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取信息
+      tags:
+      - 用户相关
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户的登录，通过账号密码
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: username
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 登录
+      tags:
+      - 用户相关
+  /api/user/logout:
+    post:
+      description: 登出自己的账号
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 登出
+      tags:
+      - 用户相关
+  /api/user/register:
+    post:
+      consumes:
+      - application/json
+      description: 注册用户
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: username
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 注册
+      tags:
+      - 用户相关
+  /api/user/update:
+    post:
+      consumes:
+      - application/json
+      description: 更新用户的基本信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: username
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新信息
+      tags:
+      - 用户相关
+swagger: "2.0"

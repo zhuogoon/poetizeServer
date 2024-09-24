@@ -11,4 +11,6 @@ func Router(r *gin.RouterGroup) {
 	r.POST("logout", Logout)
 
 	r.GET("info", Info)
+
+	r.POST("update", Update)
 }
