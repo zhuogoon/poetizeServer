@@ -32,6 +32,20 @@ func Register(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusOK, resp)
 		return
 	}
+	b, err := biz.IsUser(req.Username)
+	if b {
+		resp.Code = http.StatusOK
+		resp.Msg = "用户名已存在"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+	if err != nil {
+		resp.Code = http.StatusOK
+		resp.Msg = "参数错误"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+
 	err = biz.CreatUser(req.Username, req.Password)
 	if err != nil {
 		resp.Code = http.StatusOK

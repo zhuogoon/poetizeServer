@@ -36,8 +36,17 @@ func JwtParse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		resp := &response.BaseResponse{}
 
-		if c.Request.URL.Path == "/api/user/login" || c.Request.URL.Path == "/api/user/register" {
-			return
+		allowedPaths := []string{
+			"/api/user/login",
+			"/api/user/register",
+			"/api/admin/log",
+			"/api/admin/reg",
+		}
+
+		for _, path := range allowedPaths {
+			if c.Request.URL.Path == path {
+				return
+			}
 		}
 
 		auth := c.Request.Header.Get("Authorization")

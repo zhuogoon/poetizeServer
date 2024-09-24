@@ -2,6 +2,13 @@ package apis
 
 import "github.com/gin-gonic/gin"
 
+func Admin(r *gin.RouterGroup) {
+
+	r.POST("reg", AdminReg)
+
+	r.POST("log", AdminLogin)
+}
+
 func Router(r *gin.RouterGroup) {
 
 	r.POST("register", Register)
