@@ -13,4 +13,6 @@ func Router(r *gin.RouterGroup) {
 	r.GET("info", Info)
 
 	r.POST("update", Update)
+
+	r.POST("changepassword", ChangePassword)
 }

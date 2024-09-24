@@ -61,6 +61,7 @@ func GetIdByUsername(username string) (uint, error) {
 	return user.ID, nil
 }
 
+// GetInfo 获取用户信息
 func GetInfo() (models.User, error) {
 	var user models.User
 	err := global.DB.Model(&models.User{}).Where("id = ?", global.UserId).First(&user).Error
@@ -70,6 +71,20 @@ func GetInfo() (models.User, error) {
 	return user, nil
 }
 
+// Update 修改用户信息
 func Update(user models.User) error {
 	return global.DB.Model(&models.User{}).Where("id = ?", global.UserId).Updates(user).Error
+}
+
+// ChangePassword 修改密码
+func ChangePassword(password string) error {
+	pwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	err = global.DB.Model(&models.User{}).Where("id = ?", global.UserId).Update("password", pwd).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -75,7 +75,7 @@ func Login(c *gin.Context) {
 			return
 		}
 		resp.Code = http.StatusOK
-		resp.Msg = "服务错误，请稍后再试"
+		resp.Msg = "用户不存在"
 		c.AbortWithStatusJSON(http.StatusOK, resp)
 		return
 	}
@@ -196,4 +196,34 @@ func Update(c *gin.Context) {
 	resp.Msg = "更新成功"
 	c.AbortWithStatusJSON(http.StatusOK, resp)
 	return
+}
+
+func ChangePassword(c *gin.Context) {
+	req := request.UserPassword{}
+	resp := response.BaseResponse{}
+
+	err := c.ShouldBindBodyWithJSON(&req)
+	if err != nil {
+		resp.Code = http.StatusOK
+		resp.Msg = "参数错误"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+	err = biz.ChangePassword(req.Password)
+	if err != nil {
+		resp.Code = http.StatusOK
+		resp.Msg = "修改失败"
+		c.AbortWithStatusJSON(http.StatusOK, resp)
+		return
+	}
+	token := c.GetHeader("Authorization")
+	if token != "" {
+		global.RDB.Set(global.Ctx, token, "revoked", 0) // 将令牌加入黑名单，设置为永不过期
+	}
+
+	resp.Code = http.StatusOK
+	resp.Msg = "修改成功，请重新登录"
+	c.AbortWithStatusJSON(http.StatusOK, resp)
+	return
+
 }
