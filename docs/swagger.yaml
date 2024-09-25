@@ -1,12 +1,61 @@
 basePath: /api
 definitions:
+  models.Article:
+    type: object
   models.User:
+    type: object
+  request.ArtInfoReq:
+    properties:
+      id:
+        type: integer
+    type: object
+  request.UserPassword:
+    properties:
+      password:
+        type: string
     type: object
   request.UserRequest:
     properties:
       password:
         type: string
       username:
+        type: string
+    type: object
+  response.ArticleInfo:
+    properties:
+      article:
+        properties:
+          article_content:
+            type: string
+          article_cover:
+            type: string
+          article_title:
+            type: string
+          comment_status:
+            type: integer
+          label_id:
+            type: integer
+          like_count:
+            type: integer
+          recommend_status:
+            description: 是否推荐 0 否， 1 是
+            type: integer
+          sort_id:
+            type: integer
+          tips:
+            type: string
+          user_id:
+            type: integer
+          video_url:
+            type: string
+          view_count:
+            type: integer
+          view_status:
+            type: integer
+        type: object
+      code:
+        type: integer
+      msg:
         type: string
     type: object
   response.BaseResponse:
@@ -60,6 +109,143 @@ info:
   title: 最美的博客
   version: "1.0"
 paths:
+  /api/admin/log:
+    post:
+      description: 管理员后台管理系统的等录
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: user_id
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserInfo'
+      summary: 管理员登录
+      tags:
+      - 管理员相关
+  /api/admin/reg:
+    post:
+      description: 管理员进行账号的注册
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: user_id
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserInfo'
+      summary: 管理员注册
+      tags:
+      - 管理员相关
+  /api/art/artinfo:
+    post:
+      consumes:
+      - application/json
+      description: 获取这个文章的所有信息
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.ArtInfoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ArticleInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取文章信息
+      tags:
+      - 文章相关
+  /api/art/create:
+    post:
+      consumes:
+      - application/json
+      description: 用户进行文章的添加
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: username
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加文章
+      tags:
+      - 文章相关
+  /api/user/changepassword:
+    post:
+      consumes:
+      - application/json
+      description: 更新用户的密码
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新密码
+      tags:
+      - 用户相关
   /api/user/info:
     get:
       description: 获取到所需要的用户基本信息

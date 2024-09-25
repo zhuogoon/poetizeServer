@@ -9,6 +9,17 @@ import (
 	"poetize_server/models/response"
 )
 
+// CreateArt  添加文章
+// @Summary 添加文章
+// @Description 用户进行文章的添加
+// @Tags 文章相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body models.Article true "username"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/art/create [post]
+// @Security ApiKeyAuth
 func CreateArt(c *gin.Context) {
 	req := models.Article{}
 	resp := response.BaseResponse{}
@@ -36,6 +47,17 @@ func CreateArt(c *gin.Context) {
 
 }
 
+// ArtInfo   获取文章信息
+// @Summary 获取文章信息
+// @Description 获取这个文章的所有信息
+// @Tags 文章相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body request.ArtInfoReq true "id"
+// @Success 200 {object} response.ArticleInfo
+// @Router /api/art/artinfo [post]
+// @Security ApiKeyAuth
 func ArtInfo(c *gin.Context) {
 	req := request.ArtInfoReq{}
 	resp := response.ArticleInfo{}

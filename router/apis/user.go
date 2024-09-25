@@ -82,14 +82,14 @@ func Login(c *gin.Context) {
 
 	b, err := biz.IsUser(req.Username)
 	if b == false {
-		if err != nil {
+		if err == nil {
 			resp.Code = http.StatusOK
 			resp.Msg = "用户未注册"
 			c.AbortWithStatusJSON(http.StatusOK, resp)
 			return
 		}
 		resp.Code = http.StatusOK
-		resp.Msg = "用户不存在"
+		resp.Msg = "参数错误"
 		c.AbortWithStatusJSON(http.StatusOK, resp)
 		return
 	}
@@ -212,6 +212,17 @@ func Update(c *gin.Context) {
 	return
 }
 
+// ChangePassword  更新用户面膜
+// @Summary 更新密码
+// @Description 更新用户的密码
+// @Tags 用户相关
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body request.UserPassword true "password"
+// @Success 200 {object} response.BaseResponse
+// @Router /api/user/changepassword [post]
+// @Security ApiKeyAuth
 func ChangePassword(c *gin.Context) {
 	req := request.UserPassword{}
 	resp := response.BaseResponse{}

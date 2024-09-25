@@ -16,6 +16,220 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/admin/log": {
+            "post": {
+                "description": "管理员后台管理系统的等录",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员相关"
+                ],
+                "summary": "管理员登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "user_id",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/reg": {
+            "post": {
+                "description": "管理员进行账号的注册",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员相关"
+                ],
+                "summary": "管理员注册",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "user_id",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/art/artinfo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取这个文章的所有信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章相关"
+                ],
+                "summary": "获取文章信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "id",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ArtInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ArticleInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/art/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户进行文章的添加",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章相关"
+                ],
+                "summary": "添加文章",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "username",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Article"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/changepassword": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新用户的密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关"
+                ],
+                "summary": "更新密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "password",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/info": {
             "get": {
                 "security": [
@@ -212,8 +426,27 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.Article": {
+            "type": "object"
+        },
         "models.User": {
             "type": "object"
+        },
+        "request.ArtInfoReq": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.UserPassword": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
         },
         "request.UserRequest": {
             "type": "object",
@@ -222,6 +455,62 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ArticleInfo": {
+            "type": "object",
+            "properties": {
+                "article": {
+                    "type": "object",
+                    "properties": {
+                        "article_content": {
+                            "type": "string"
+                        },
+                        "article_cover": {
+                            "type": "string"
+                        },
+                        "article_title": {
+                            "type": "string"
+                        },
+                        "comment_status": {
+                            "type": "integer"
+                        },
+                        "label_id": {
+                            "type": "integer"
+                        },
+                        "like_count": {
+                            "type": "integer"
+                        },
+                        "recommend_status": {
+                            "description": "是否推荐 0 否， 1 是",
+                            "type": "integer"
+                        },
+                        "sort_id": {
+                            "type": "integer"
+                        },
+                        "tips": {
+                            "type": "string"
+                        },
+                        "user_id": {
+                            "type": "integer"
+                        },
+                        "video_url": {
+                            "type": "string"
+                        },
+                        "view_count": {
+                            "type": "integer"
+                        },
+                        "view_status": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "msg": {
                     "type": "string"
                 }
             }

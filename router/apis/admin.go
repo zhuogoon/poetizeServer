@@ -9,6 +9,15 @@ import (
 	"poetize_server/models/response"
 )
 
+// AdminReg  管理员注册
+// @Summary 管理员注册
+// @Description 管理员进行账号的注册
+// @Tags 管理员相关
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body request.UserRequest true "user_id"
+// @Success 200 {object} response.UserInfo
+// @Router /api/admin/reg [post]
 func AdminReg(c *gin.Context) {
 	req := &request.UserRequest{}
 	resp := &response.BaseResponse{}
@@ -47,6 +56,15 @@ func AdminReg(c *gin.Context) {
 	return
 }
 
+// AdminLogin   管理员登录
+// @Summary 管理员登录
+// @Description 管理员后台管理系统的等录
+// @Tags 管理员相关
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param user body request.UserRequest true "user_id"
+// @Success 200 {object} response.UserInfo
+// @Router /api/admin/log [post]
 func AdminLogin(c *gin.Context) {
 	req := &request.UserRequest{}
 	resp := &response.BaseResponse{}
